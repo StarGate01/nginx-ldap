@@ -4,12 +4,9 @@ MAINTAINER Ondrej Burkert <ondrej.burkert@gmail.com>
 
 ENV NGINX_VERSION release-1.10.2
 
-# Use jessie-backports for openssl >= 1.0.2
-# This is required by nginx-auth-ldap when ssl_check_cert is turned on.
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections \
-	&& echo 'deb http://ftp.debian.org/debian/ jessie-backports main' > /etc/apt/sources.list.d/backports.list \
 	&& apt-get update \
-	&& apt-get install -t jessie-backports -y \
+	&& apt-get install -y \
 		ca-certificates \
 		git \
 		gcc \
