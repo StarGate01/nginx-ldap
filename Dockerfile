@@ -26,12 +26,14 @@ RUN mkdir /var/log/nginx \
 	&& cd ~ \
 	&& git clone https://github.com/kvspb/nginx-auth-ldap.git \
 	&& git clone https://bitbucket.org/nginx-goodies/nginx-sticky-module-ng.git \
+        && git clone https://github.com/atomx/nginx-http-auth-digest.git \
 	&& git clone https://github.com/nginx/nginx.git \
 	&& cd ~/nginx \
 	&& git checkout tags/${NGINX_VERSION} \
 	&& ./auto/configure \
         --add-module=/root/nginx-auth-ldap \
         --add-module=/root/nginx-sticky-module-ng \
+        --add-module=/root/nginx-http-auth-digest \
         --with-debug \
         --prefix=/etc/nginx \
         --sbin-path=/usr/sbin/nginx \
