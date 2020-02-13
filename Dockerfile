@@ -1,8 +1,8 @@
-FROM debian:8.6
+FROM debian:10.2
 
 MAINTAINER Ondrej Burkert <ondrej.burkert@gmail.com>
 
-ENV NGINX_VERSION release-1.10.2
+ENV NGINX_VERSION release-1.16.1
 
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections \
 	&& apt-get update \
@@ -15,7 +15,9 @@ RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selectio
 		zlib1g-dev \
 		libldap2-dev \
 		libssl-dev \
-		wget
+		wget \
+                perl \
+                libperl-dev
 
 # See http://wiki.nginx.org/InstallOptions
 RUN mkdir /var/log/nginx \
@@ -65,6 +67,7 @@ RUN mkdir /var/log/nginx \
         --with-http_stub_status_module \
         --with-http_sub_module \
         --with-http_v2_module \
+        --with-http_perl_module \
         --with-mail \
         --with-mail_ssl_module \
         --with-stream \
@@ -83,7 +86,7 @@ RUN mkdir /var/log/nginx \
 	&& rm -rf nginx-auth-ldap \
 	&& rm -rf nginx-sticky-module-ng \
 	&& rm -rf nginx \
-	&& wget -O /tmp/dockerize.tar.gz https://github.com/jwilder/dockerize/releases/download/v0.2.0/dockerize-linux-amd64-v0.2.0.tar.gz \
+	&& wget -O /tmp/dockerize.tar.gz https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-amd64-v0.6.1.tar.gz \
 	&& tar -C /usr/local/bin -xzvf /tmp/dockerize.tar.gz \
 	&& rm -rf /tmp/dockerize.tar.gz
 
