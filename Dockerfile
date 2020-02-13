@@ -85,10 +85,7 @@ RUN mkdir /var/log/nginx \
 	&& cd .. \
 	&& rm -rf nginx-auth-ldap \
 	&& rm -rf nginx-sticky-module-ng \
-	&& rm -rf nginx \
-	&& wget -O /tmp/dockerize.tar.gz https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-amd64-v0.6.1.tar.gz \
-	&& tar -C /usr/local/bin -xzvf /tmp/dockerize.tar.gz \
-	&& rm -rf /tmp/dockerize.tar.gz
+	&& rm -rf nginx
 
 EXPOSE 80 443
 
@@ -96,9 +93,13 @@ RUN groupadd nginx \
     && useradd -ms /bin/sh -g nginx nginx \
     && mkdir /var/cache/nginx \
     && mkdir /var/cache/nginx/client_temp \
-    && touch /var/log/nginx/access.log \
-    && touch /var/log/nginx/error.log \
+    && mkfifo -m 600 /tmp/logpipe \
+    && chown nginx:nginx /tmp/logpipe \
+    && ln -sf /tmp/logpipe /var/log/nginx/access.log \
+    && ln -sf /tmp/logpipe /var/log/nginx/error.log \
     && chmod -R 766 /var/log/nginx /var/cache/nginx \
     && chmod 644 /etc/nginx/*
 
-CMD ["dockerize","-stdout","/var/log/nginx/access.log","-stderr","/var/log/nginx/error.log","-poll","/usr/sbin/nginx","-g","daemon off;"]
+COPY run.sh /app/run.sh
+RUN chmod +x /app/run.sh
+CMD ["/app/run.sh"]
