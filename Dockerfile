@@ -96,6 +96,8 @@ RUN groupadd nginx \
     && useradd -ms /bin/sh -g nginx nginx \
     && mkdir /var/cache/nginx \
     && mkdir /var/cache/nginx/client_temp \
+    && touch /var/log/nginx/access.log \
+    && touch /var/log/nginx/error.log \
     && chmod -R 766 /var/log/nginx /var/cache/nginx \
     && chmod 644 /etc/nginx/*
 
