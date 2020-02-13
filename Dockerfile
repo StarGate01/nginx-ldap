@@ -21,15 +21,15 @@ RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selectio
 
 # See http://wiki.nginx.org/InstallOptions
 RUN mkdir /var/log/nginx \
-        && mkdir /etc/nginx \
-        && cd ~ \
-        && git clone https://github.com/kvspb/nginx-auth-ldap.git \
-        && git clone https://bitbucket.org/nginx-goodies/nginx-sticky-module-ng.git \
+	&& mkdir /etc/nginx \
+	&& cd ~ \
+	&& git clone https://github.com/kvspb/nginx-auth-ldap.git \
+	&& git clone https://bitbucket.org/nginx-goodies/nginx-sticky-module-ng.git \
         && git clone https://github.com/atomx/nginx-http-auth-digest.git \
-        && git clone https://github.com/nginx/nginx.git \
-        && cd ~/nginx \
-        && git checkout tags/${NGINX_VERSION} \
-        && ./auto/configure \
+	&& git clone https://github.com/nginx/nginx.git \
+	&& cd ~/nginx \
+	&& git checkout tags/${NGINX_VERSION} \
+	&& ./auto/configure \
         --add-module=/root/nginx-auth-ldap \
         --add-module=/root/nginx-sticky-module-ng \
         --add-module=/root/nginx-http-auth-digest \
@@ -81,23 +81,22 @@ RUN mkdir /var/log/nginx \
         --with-ld-opt='-Wl,-z,relro \
         -Wl,-z,now \
         -Wl,--as-needed' \
-        && make install \
-        && cd .. \
-        && rm -rf nginx-auth-ldap \
-        && rm -rf nginx-sticky-module-ng \
-        && rm -rf nginx
+	&& make install \
+	&& cd .. \
+	&& rm -rf nginx-auth-ldap \
+	&& rm -rf nginx-sticky-module-ng \
+	&& rm -rf nginx \
+	&& wget -O /tmp/dockerize.tar.gz https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-amd64-v0.6.1.tar.gz \
+	&& tar -C /usr/local/bin -xzvf /tmp/dockerize.tar.gz \
+	&& rm -rf /tmp/dockerize.tar.gz
 
 EXPOSE 80 443
 
 RUN groupadd nginx \
-        && useradd -ms /bin/sh -g nginx nginx \
-        && mkdir /var/cache/nginx \
-        && mkdir /var/cache/nginx/client_temp \
-        && chmod -R 766 /var/log/nginx /var/cache/nginx \
-        && chmod 644 /etc/nginx/* \
-        && chmod +w /dev/stdout \
-        && chmod +w /dev/stderr \
-        && ln -sf /dev/stdout /var/log/nginx/access.log \
-        && ln -sf /dev/stderr /var/log/nginx/error.log
+    && useradd -ms /bin/sh -g nginx nginx \
+    && mkdir /var/cache/nginx \
+    && mkdir /var/cache/nginx/client_temp \
+    && chmod -R 766 /var/log/nginx /var/cache/nginx \
+    && chmod 644 /etc/nginx/*
 
-CMD ["nginx","-g","daemon off;"]
+CMD ["dockerize","-stdout","/var/log/nginx/access.log","-stderr","/var/log/nginx/error.log","/usr/sbin/nginx","-g","daemon off;"]
