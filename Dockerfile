@@ -95,6 +95,8 @@ RUN groupadd nginx \
         && mkdir /var/cache/nginx/client_temp \
         && chmod -R 766 /var/log/nginx /var/cache/nginx \
         && chmod 644 /etc/nginx/* \
+        && chmod +w /dev/stdout \
+        && chmod +w /dev/stderr \
         && ln -sf /dev/stdout /var/log/nginx/access.log \
         && ln -sf /dev/stderr /var/log/nginx/error.log
 
