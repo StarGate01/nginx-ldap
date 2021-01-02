@@ -2,7 +2,7 @@ FROM debian:10.2
 
 MAINTAINER Ondrej Burkert <ondrej.burkert@gmail.com>
 
-ENV NGINX_VERSION release-1.16.1
+ENV NGINX_VERSION release-1.19.6
 
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections \
 	&& apt-get update \
