@@ -91,15 +91,10 @@ EXPOSE 80 443
 
 RUN groupadd nginx \
     && useradd -ms /bin/sh -g nginx nginx \
-    && mkdir /var/cache/nginx \
+    && mkdir -p /var/cache/nginx \
+    && mkdir -p /var/log/nginx \
     && mkdir /var/cache/nginx/client_temp \
-    && mkfifo -m 600 /tmp/logpipe \
-    && chown nginx:nginx /tmp/logpipe \
-    && ln -sf /tmp/logpipe /var/log/nginx/access.log \
-    && ln -sf /tmp/logpipe /var/log/nginx/error.log \
     && chmod -R 766 /var/log/nginx /var/cache/nginx \
     && chmod 644 /etc/nginx/*
 
-COPY run.sh /app/run.sh
-RUN chmod +x /app/run.sh
-CMD ["/app/run.sh"]
+CMD ["nginx", "-g", "'daemon off;'"]
