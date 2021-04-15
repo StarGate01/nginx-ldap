@@ -98,4 +98,4 @@ RUN groupadd nginx \
     && chmod -R 766 /var/log/nginx /var/cache/nginx \
     && chmod 644 /etc/nginx/*
 
-CMD ["nginx", "-g", "'daemon off;'"]
+CMD ["nginx", "-g", "daemon off;"]
