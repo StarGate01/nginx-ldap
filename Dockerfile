@@ -85,6 +85,7 @@ RUN mkdir /var/log/nginx \
 	&& cd .. \
 	&& rm -rf nginx-auth-ldap \
 	&& rm -rf nginx-sticky-module-ng \
+        && rm -rf nginx-http-auth-digest \
 	&& rm -rf nginx
 
 EXPOSE 80 443
